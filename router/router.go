@@ -1,6 +1,7 @@
 package router
 
 import (
+	"sithil/internals/middleware"
 	productHandler "sithil/internals/service/product"
 	userHandler "sithil/internals/service/user"
 
@@ -13,7 +14,9 @@ func SetupRoutes(app *fiber.App) {
 
 	// User Api Routes
 	user := api.Group("/user")
+	user.Get("/", middleware.Protected(), userHandler.TestJWT)
 	user.Post("/register", userHandler.Create)
+	user.Post("/login", userHandler.Login)
 
 	// Product Api Routes
 	product := api.Group("/product")
