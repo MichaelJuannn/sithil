@@ -22,7 +22,7 @@ func ConnectDB() {
 	}
 
 	// connection url
-	dsn := fmt.Sprintf("%s:%s@(%s:%d)/%s?", config.Config("DB_USER"), config.Config("DB_PASSWORD"), config.Config("DB_HOST"), port, config.Config("DB_NAME"))
+	dsn := fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", config.Config("DB_USER"), config.Config("DB_PASSWORD"), config.Config("DB_HOST"), port, config.Config("DB_NAME"))
 	// connect to db and create connection var
 	DB, err = gorm.Open(mysql.Open(dsn))
 
