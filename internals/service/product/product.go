@@ -4,6 +4,7 @@ import (
 	"sithil/database"
 	"sithil/internals/model"
 
+	"github.com/go-faker/faker/v4"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -33,4 +34,21 @@ func Create(c *fiber.Ctx) error {
 		c.Status(400).SendString("failed to create product")
 	}
 	return c.Status(200).JSON(product)
+}
+
+func SeedProduct(c *fiber.Ctx) error {
+	db := database.DB
+	data := make([]model.Product, 0)
+	single := model.Product{}
+	for i := 1; i <= 10; i++ {
+		err := faker.FakeData(&single)
+		single.CategoryID = uint(i%3 + 1)
+		single.ID = uint(i)
+		if err != nil {
+			println(err)
+		}
+		data = append(data, single)
+	}
+	db.Create(&data)
+	return c.Status(200).JSON(fiber.Map{"status": "success"})
 }

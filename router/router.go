@@ -22,6 +22,7 @@ func SetupRoutes(app *fiber.App) {
 
 	// Product Api Routes
 	product := api.Group("/product")
+	product.Get("/seed", productHandler.SeedProduct)
 	product.Get("/", productHandler.GetAll)
 
 	// Cart Api Routes

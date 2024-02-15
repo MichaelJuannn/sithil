@@ -10,6 +10,7 @@ import (
 func main() {
 	app := fiber.New()
 	database.ConnectDB()
+	database.SeedDatabase()
 	router.SetupRoutes(app)
 	app.Listen(":8000")
 }
