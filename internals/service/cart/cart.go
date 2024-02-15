@@ -1,7 +1,6 @@
 package cartService
 
 import (
-	"fmt"
 	"sithil/database"
 	"sithil/internals/model"
 	"strconv"
@@ -62,7 +61,32 @@ func GetCart(c *fiber.Ctx) error {
 	FROM products p 
 	INNER JOIN cart_products cp ON cp.product_id = p.id 
 	WHERE cp.cart_id = ?;`, user.Cart.ID).Scan(&products)
-	fmt.Printf("%+v\n", products)
+	if len(products) == 0 {
+		return c.Status(200).JSON(fiber.Map{"status": "cart is empty"})
+
+	}
 
 	return c.Status(200).JSON(products)
+}
+
+func DeleteProduct(c *fiber.Ctx) error {
+	db := database.DB
+	t := c.Locals("user").(*jwt.Token)
+	claims := t.Claims.(jwt.MapClaims)
+	userID := claims["id"].(float64)
+	reqProduct := c.Query("product", "empty")
+	if reqProduct == "empty" {
+		return c.Status(400).JSON(fiber.Map{"status": "no product id"})
+	}
+
+	var user model.User
+	if err := db.Preload("Cart").First(&user, "id = ?", userID).Error; err != nil {
+		return c.Status(500).JSON(fiber.Map{"status": err.Error()})
+	}
+	var cartProduct model.CartProduct
+	if err := db.Delete(&cartProduct, "cart_id = ? AND product_id = ?", user.Cart.ID, reqProduct).Error; err != nil {
+		return c.Status(500).JSON(fiber.Map{"status": err.Error()})
+	}
+	return c.Status(200).JSON(fiber.Map{"status": "success"})
+
 }

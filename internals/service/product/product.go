@@ -22,3 +22,15 @@ func GetAll(c *fiber.Ctx) error {
 	}
 	return c.Status(200).JSON(products)
 }
+
+func Create(c *fiber.Ctx) error {
+	db := database.DB
+	product := new(model.Product)
+	if err := c.BodyParser(&product); err != nil {
+		c.Status(400).SendString("invalid data")
+	}
+	if err := db.Create(&product).Error; err != nil {
+		c.Status(400).SendString("failed to create product")
+	}
+	return c.Status(200).JSON(product)
+}

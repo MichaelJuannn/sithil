@@ -3,6 +3,7 @@ package router
 import (
 	"sithil/internals/middleware"
 	cartService "sithil/internals/service/cart"
+	orderService "sithil/internals/service/order"
 	productHandler "sithil/internals/service/product"
 	userHandler "sithil/internals/service/user"
 
@@ -27,4 +28,7 @@ func SetupRoutes(app *fiber.App) {
 	cart := api.Group("/cart")
 	cart.Post("/", middleware.Protected(), cartService.Add)
 	cart.Get("/", middleware.Protected(), cartService.GetCart)
+	cart.Delete("/", middleware.Protected(), cartService.DeleteProduct)
+	cart.Get("/checkout", middleware.Protected(), orderService.Checkout)
+
 }
