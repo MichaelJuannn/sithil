@@ -30,8 +30,6 @@ func ConnectDB() {
 		panic("connection to db failed")
 	}
 	//Migrate DB care about the order
-	DB.AutoMigrate(&model.User{}, &model.Cart{}, &model.Product{}, &model.Category{}, &model.Order{}, &model.CartProduct{}, &model.OrderProduct{})
-
 	if err := DB.SetupJoinTable(&model.Cart{}, "Products", &model.CartProduct{}); err != nil {
 		println(err.Error())
 		panic("failed to setup join tables")
@@ -40,6 +38,8 @@ func ConnectDB() {
 		println(err.Error())
 		panic("failed to setup join tables")
 	}
+
+	DB.AutoMigrate(&model.User{}, &model.Cart{}, &model.Product{}, &model.Category{}, &model.Order{}, &model.CartProduct{}, &model.OrderProduct{})
 
 	fmt.Println("connection to db established")
 
