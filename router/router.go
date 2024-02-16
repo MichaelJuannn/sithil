@@ -15,17 +15,17 @@ func SetupRoutes(app *fiber.App) {
 	api := app.Group("/api", logger.New())
 
 	// User Api Routes
-	user := api.Group("/user")
+	user := api.Group("/users")
 	user.Get("/", middleware.Protected(), userHandler.TestJWT)
 	user.Post("/register", userHandler.Create)
 	user.Post("/login", userHandler.Login)
 
 	// Product Api Routes
-	product := api.Group("/product")
+	product := api.Group("/products")
 	product.Get("/", productHandler.GetAll)
 
 	// Cart Api Routes
-	cart := api.Group("/cart")
+	cart := api.Group("/carts")
 	cart.Post("/", middleware.Protected(), cartService.Add)
 	cart.Get("/", middleware.Protected(), cartService.GetCart)
 	cart.Delete("/", middleware.Protected(), cartService.DeleteProduct)
