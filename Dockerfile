@@ -21,6 +21,8 @@ RUN apk add libc6-compat
 
 COPY --from=buildstage /main /app/main
 
+COPY .env /app/.env
+
 EXPOSE 8000
 
 ENTRYPOINT ["/app/main"]
