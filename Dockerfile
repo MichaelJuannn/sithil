@@ -13,7 +13,7 @@ RUN go build -o /main .
 
 # Deploy stage
 
-FROM alpine:latest 
+FROM alpine:latest
 
 WORKDIR /
 
