@@ -39,7 +39,7 @@ func ConnectDB() {
 		panic("failed to setup join tables")
 	}
 
-	DB.AutoMigrate(&model.User{}, &model.Cart{}, &model.Product{}, &model.Category{}, &model.Order{}, &model.CartProduct{}, &model.OrderProduct{})
+	DB.AutoMigrate(&model.User{}, &model.Cart{}, &model.Category{}, &model.Product{}, &model.Order{}, &model.CartProduct{}, &model.OrderProduct{})
 
 	fmt.Println("connection to db established")
 

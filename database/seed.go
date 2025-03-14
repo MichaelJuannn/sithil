@@ -19,7 +19,10 @@ func SeedDatabase(row int) {
 		}
 		data = append(data, single)
 	}
+	var count int64
 	db := DB
-	db.Create(&data)
-
+	db.Model(&model.Product{}).Count(&count)
+	if count < 75 {
+		db.Create(&data)
+	}
 }
