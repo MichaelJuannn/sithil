@@ -53,11 +53,12 @@ spec:
     env:
     - name: MYSQL_ROOT_PASSWORD
       value: temp123
+    - name: MYSQL_DATABASE
+      value: sithil
     image: docker.io/library/mysql:8
     name: mysql-container
     ports:
     - containerPort: 3306
-    - containerPort: 8000
     volumeMounts:
     - mountPath: /var/lib/mysql
       name: mysql-data-pvc
@@ -76,6 +77,10 @@ spec:
       value: xdd
     image: localhost/sithil-image:latest
     name: sithilcont
+    ports:
+    - containerPort: 8000
+    - hostPort: 8000
+    - protocol: TCP
   volumes:
   - name: mysql-data-pvc
     persistentVolumeClaim:
