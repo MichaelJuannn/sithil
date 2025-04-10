@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cursed
+spec:
+  containers:
+    - name: app
+      image: sithil-image  # Use the built image
+      ports:
+        - containerPort: 8000
+      env:
+        - name: DB_HOST
+          value: "db"
+        - name: DB_PORT
+          value: "3306"
+        - name: JWT_SECRET
+          value: "xd"
+      envFrom:
+        - file: /env/.env
+      volumeMounts:
+        - mountPath: "/env"
+          name: env-volume
+    - name: db
+      image: mysql:8
+      ports:
+        - containerPort: 3306
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "temp123"
+      envFrom:
+        - file: /env/.env
+      volumeMounts:
+        - mountPath: "/var/lib/mysql"
+          name: db-storage
+  volumes:
+    - name: db-storage
+      persistentVolumeClaim:
+        claimName: db-pvc
+    - name: env-volume
+      hostPath:
+        path: "./.env"

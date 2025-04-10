@@ -1,4 +1,4 @@
-FROM golang:1.21.1 AS buildstage
+FROM docker.io/golang:1.21.1 AS buildstage
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ RUN go build -o /main .
 
 # Deploy stage
 
-FROM alpine:latest
+FROM docker.io/alpine:latest
 
 WORKDIR /
 

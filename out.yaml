@@ -1,0 +1,83 @@
+# Save the output of this file and use kubectl create -f to import
+# it into Kubernetes.
+#
+# Created with podman-4.6.2
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2025-03-30T10:08:25Z"
+  labels:
+    app: sith-pod
+  name: sith-pod
+spec:
+  ports:
+  - name: "3306"
+    nodePort: 32478
+    port: 3306
+    targetPort: 3306
+  - name: "8000"
+    nodePort: 31396
+    port: 8000
+    targetPort: 8000
+  selector:
+    app: sith-pod
+  type: NodePort
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    com.docker.official-images.bashbrew.arch/mysql-container: amd64
+    com.docker.official-images.bashbrew.arch/sithilcont: amd64
+    org.opencontainers.image.base.digest/mysql-container: sha256:ca51049296febbb7a129157d594cdcfa9de8f5cbcf017c683417b4c9
+    org.opencontainers.image.base.name/mysql-container: oraclelinux:9-slim
+    org.opencontainers.image.base.name/sithilcont: scratch
+    org.opencontainers.image.created/mysql-container: "2025-01-21T17:21:51Z"
+    org.opencontainers.image.created/sithilcont: "2025-02-14T03:28:36Z"
+    org.opencontainers.image.revision/mysql-container: 42386a0efb57a032d707e822086feea263088ad9
+    org.opencontainers.image.revision/sithilcont: 17fe3d1e2d2cbf54d745139eab749c252e35b883
+    org.opencontainers.image.source/mysql-container: https://github.com/docker-library/mysql.git#42386a0efb57a032d70
+    org.opencontainers.image.source/sithilcont: https://github.com/alpinelinux/docker-alpine.git#17fe3d1e2d2cbf
+    org.opencontainers.image.url/mysql-container: https://hub.docker.com/_/mysql
+    org.opencontainers.image.url/sithilcont: https://hub.docker.com/_/alpine
+    org.opencontainers.image.version/mysql-container: 8.4.4
+    org.opencontainers.image.version/sithilcont: 3.21.3
+  creationTimestamp: "2025-03-30T10:08:25Z"
+  labels:
+    app: sith-pod
+  name: sith-pod
+spec:
+  containers:
+  - args:
+    - mysqld
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: temp123
+    image: docker.io/library/mysql:8
+    name: mysql-container
+    ports:
+    - containerPort: 3306
+    - containerPort: 8000
+    volumeMounts:
+    - mountPath: /var/lib/mysql
+      name: mysql-data-pvc
+  - env:
+    - name: DB_USER
+      value: root
+    - name: DB_PASSWORD
+      value: temp123
+    - name: DB_PORT
+      value: "3306"
+    - name: DB_NAME
+      value: sithil
+    - name: DB_HOST
+      value: localhost
+    - name: JWT_SECRET
+      value: xdd
+    image: localhost/sithil-image:latest
+    name: sithilcont
+  volumes:
+  - name: mysql-data-pvc
+    persistentVolumeClaim:
+      claimName: mysql-data
+
