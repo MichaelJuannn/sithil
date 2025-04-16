@@ -19,10 +19,18 @@ func SeedDatabase(row int) {
 		}
 		data = append(data, single)
 	}
-	var count int64
+	var productCount int64
+	var categoryCount int64
 	db := DB
-	db.Model(&model.Product{}).Count(&count)
-	if count < 75 {
+	db.Model(&model.Category{}).Count(&categoryCount)
+	db.Model(&model.Product{}).Count(&productCount)
+	if productCount < 25 && categoryCount == 0 {
+		categories := []model.Category{
+			{ID: 1, Name: "Electronics"},
+			{ID: 2, Name: "Clothings"},
+			{ID: 3, Name: "Furnitures"},
+		}
+		db.Create(&categories)
 		db.Create(&data)
 	}
 }
