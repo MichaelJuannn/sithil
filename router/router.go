@@ -3,6 +3,7 @@ package router
 import (
 	"sithil/internals/middleware"
 	cartService "sithil/internals/service/cart"
+	categoriesHandler "sithil/internals/service/categories"
 	orderService "sithil/internals/service/order"
 	productHandler "sithil/internals/service/product"
 	userHandler "sithil/internals/service/user"
@@ -23,6 +24,11 @@ func SetupRoutes(app *fiber.App) {
 	// Product Api Routes
 	product := api.Group("/products")
 	product.Get("/", productHandler.GetAll)
+
+	// Category api route
+	category := api.Group("/category")
+	category.Get("/", categoriesHandler.GetAll)
+	category.Post("/", categoriesHandler.Create)
 
 	// Cart Api Routes
 	cart := api.Group("/carts")
